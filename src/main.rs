@@ -8,6 +8,7 @@ fn main() {
     let device_info_list = mvs::enumerate_devices(&a).unwrap();
     println!("device num: {}", device_info_list.len());
     for device_info in device_info_list {
+        assert!(device_info.is_device_accesible(mvs::AccessMode::Exclusive));
         let handle = mvs::DeviceHandle::new(device_info).unwrap();
         handle.open(mvs::AccessMode::Exclusive).unwrap();
         handle.start_grabbing().unwrap();
