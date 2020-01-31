@@ -48,9 +48,9 @@ pub enum Error {
 
 pub type Result<T> = std::result::Result<T, Error>;
 
-impl Error {
-    pub(crate) fn as_raw(&self) -> u32 {
-        match self {
+impl From<Error> for u32 {
+    fn from(err: Error) -> Self {
+        match err {
             Error::Handle => mvs_sys::MV_E_HANDLE,
             Error::Support => mvs_sys::MV_E_SUPPORT,
             Error::Bufover => mvs_sys::MV_E_BUFOVER,

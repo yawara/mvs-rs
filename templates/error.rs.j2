@@ -7,9 +7,9 @@ pub enum Error {
 
 pub type Result<T> = std::result::Result<T, Error>;
 
-impl Error {
-    pub(crate) fn as_raw(&self) -> u32 {
-        match self {
+impl From<Error> for u32 {
+    fn from(err: Error) -> Self {
+        match err {
             {%- for name, raw in names_and_raws %}
             Error::{{ name }} => mvs_sys::MV_E_{{ raw }},
             {%- endfor %}
