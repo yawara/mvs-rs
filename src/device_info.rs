@@ -1,14 +1,8 @@
 use crate::access_mode::AccessMode;
 use crate::error::*;
-use std::mem;
+use crate::transport_layer::TransportLayerType;
 
-#[derive(Debug, Clone, Copy)]
-pub enum TransportLayerType {
-    UnknwonDevice,
-    GigeDevice,
-    UsbDevice,
-    CameraLinkDevice,
-}
+use std::mem;
 
 pub struct DeviceInfo {
     raw: *mut mvs_sys::MV_CC_DEVICE_INFO,
@@ -24,19 +18,15 @@ impl DeviceInfo {
     }
 }
 
-pub fn enumerate_tls() -> Vec<TransportLayerType> {
-    unsafe {
-        let supports = mvs_sys::MV_CC_EnumerateTls();
-        todo!()
-    }
-}
-
 pub fn enumerate_devices(tlayer_types: &[TransportLayerType]) -> Result<Vec<DeviceInfo>> {
-    // TODO: support other devices
+    let mut targets: u32 = 0;
+    for tlayer_type in tlayer_types {
+        targets |= Into::<u32>::into(*tlayer_type);
+    }
     let mut raw: mvs_sys::MV_CC_DEVICE_INFO_LIST =
         unsafe { mem::MaybeUninit::zeroed().assume_init() };
     try_unsafe!(mvs_sys::MV_CC_EnumDevices(
-        mvs_sys::MV_USB_DEVICE,
+        targets,
         &mut raw as *mut mvs_sys::MV_CC_DEVICE_INFO_LIST,
     ));
     let mut device_info_list = Vec::new();

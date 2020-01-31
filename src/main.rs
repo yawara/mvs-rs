@@ -15,8 +15,8 @@ fn print_frame_info(frame: &mvs::Frame, fps: f64) {
 }
 
 fn main() {
-    let a = Vec::new();
-    let device_info_list = mvs::enumerate_devices(&a).unwrap();
+    let tls = dbg!(mvs::enumerate_tls());
+    let device_info_list = mvs::enumerate_devices(&tls).unwrap();
     println!("device num: {}", device_info_list.len());
     for device_info in device_info_list {
         assert!(device_info.is_device_accesible(mvs::AccessMode::Exclusive));
