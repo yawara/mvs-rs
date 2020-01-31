@@ -11,7 +11,7 @@ def snake_to_camel(snake_case):
 def main():
     names = []
     raws = []
-    env = Environment(loader=FileSystemLoader("./"))
+    env = Environment(loader=FileSystemLoader("./templates"))
     template = env.get_template("error.rs.j2")
     with open("mvs-sys/src/lib.rs") as f:
         for line in f.readlines():

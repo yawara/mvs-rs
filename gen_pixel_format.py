@@ -5,7 +5,7 @@ from jinja2 import Environment, FileSystemLoader
 
 def main():
     names = []
-    env = Environment(loader=FileSystemLoader("./"))
+    env = Environment(loader=FileSystemLoader("./templates"))
     template = env.get_template("pixel_format.rs.j2")
     with open("mvs-sys/src/lib.rs") as f:
         for line in f.readlines():
