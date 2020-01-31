@@ -2,6 +2,7 @@ use crate::device_info::{AccessMode, DeviceInfo};
 use crate::error::*;
 use crate::frame::{Frame, FrameInfo, MvFrame};
 use std::cell::Cell;
+use std::convert::TryInto;
 use std::ffi::{c_void, CString};
 use std::mem::MaybeUninit;
 use std::time::Duration;
@@ -32,6 +33,10 @@ impl DeviceHandle {
         })
     }
 
+    pub fn payload_size(&self) -> usize {
+        self.payload_size.get().try_into().unwrap()
+    }
+
     pub fn open(&self, mode: AccessMode) -> Result<()> {
         try_unsafe! {
             mvs_sys::MV_CC_OpenDevice(self.raw, mode as u32, 0)
@@ -45,7 +50,7 @@ impl DeviceHandle {
                 &mut mvcc_int as *mut mvs_sys::MVCC_INTVALUE_EX,
             );
         }
-        self.payload_size.set(mvcc_int.nCurValue + 2048); //One frame data size + reserved bytes (handled in SDK)
+        self.payload_size.set(mvcc_int.nCurValue); //One frame data size + reserved bytes (handled in SDK)
         Ok(())
     }
     pub fn close(&self) -> Result<()> {
@@ -80,7 +85,8 @@ impl DeviceHandle {
 
     pub fn get_one_frame(&self, wait: Duration) -> Result<Frame> {
         let mut frame_info = FrameInfo::new();
-        let mut buf: Vec<u8> = vec![0; self.payload_size.get() as usize];
+        let payload_size = self.payload_size() + 2048;
+        let mut buf: Vec<u8> = vec![0; payload_size];
         try_unsafe! {
             mvs_sys::MV_CC_GetOneFrameTimeout(
                 self.raw,
@@ -95,7 +101,8 @@ impl DeviceHandle {
 
     pub fn get_image_for_rgb(&self, wait: Duration) -> Result<Frame> {
         let mut frame_info = FrameInfo::new();
-        let mut buf: Vec<u8> = vec![0; self.payload_size.get() as usize];
+        let payload_size = self.payload_size() / 2 * 3 + 2048;
+        let mut buf: Vec<u8> = vec![0; payload_size];
         try_unsafe! {
             mvs_sys::MV_CC_GetImageForRGB(
                 self.raw,
@@ -110,7 +117,8 @@ impl DeviceHandle {
 
     pub fn get_image_for_bgr(&self, wait: Duration) -> Result<Frame> {
         let mut frame_info = FrameInfo::new();
-        let mut buf: Vec<u8> = vec![0; self.payload_size.get() as usize];
+        let payload_size = self.payload_size() / 2 * 3 + 2048;
+        let mut buf: Vec<u8> = vec![0; payload_size];
         try_unsafe! {
             mvs_sys::MV_CC_GetImageForBGR(
                 self.raw,
