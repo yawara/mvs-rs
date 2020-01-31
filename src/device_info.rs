@@ -1,3 +1,4 @@
+use crate::access_mode::AccessMode;
 use crate::error::*;
 use std::mem;
 
@@ -13,19 +14,9 @@ pub struct DeviceInfo {
     raw: *mut mvs_sys::MV_CC_DEVICE_INFO,
 }
 
-pub enum AccessMode {
-    Exclusive = mvs_sys::MV_ACCESS_Exclusive as isize,
-    ExclusiveWithSwitch = mvs_sys::MV_ACCESS_ExclusiveWithSwitch as isize,
-    Control = mvs_sys::MV_ACCESS_Control as isize,
-    ControlWithSwitch = mvs_sys::MV_ACCESS_ControlWithSwitch as isize,
-    ControlSwitchEnable = mvs_sys::MV_ACCESS_ControlSwitchEnable as isize,
-    ControlSwitchEnableWithKey = mvs_sys::MV_ACCESS_ControlSwitchEnableWithKey as isize,
-    Monitor = mvs_sys::MV_ACCESS_Monitor as isize,
-}
-
 impl DeviceInfo {
     pub fn is_device_accesible(&self, mode: AccessMode) -> bool {
-        unsafe { mvs_sys::MV_CC_IsDeviceAccessible(self.raw, mode as u32).is_positive() }
+        unsafe { mvs_sys::MV_CC_IsDeviceAccessible(self.raw, mode.into()).is_positive() }
     }
 
     pub(crate) fn raw(&self) -> *mut mvs_sys::MV_CC_DEVICE_INFO {

@@ -1,4 +1,5 @@
-use crate::device_info::{AccessMode, DeviceInfo};
+use crate::access_mode::AccessMode;
+use crate::device_info::DeviceInfo;
 use crate::error::*;
 use crate::frame::{Frame, FrameInfo, MvFrame};
 use std::cell::Cell;

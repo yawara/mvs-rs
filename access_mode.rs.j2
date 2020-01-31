@@ -1,0 +1,27 @@
+#[derive(Debug, Clone, Copy)]
+pub enum AccessMode {
+    {%- for name in names %}
+    {{ name }},
+    {%- endfor %}
+}
+
+impl From<u32> for AccessMode {
+    fn from(value: u32) -> Self {
+        match value {
+            {%- for name in names %}
+            mvs_sys::MV_ACCESS_{{ name }} => AccessMode::{{ name }},
+            {%- endfor %}
+            code => panic!("Undefined access mode code: {}", code),
+        }
+    }
+}
+
+impl From<AccessMode> for u32 {
+    fn from(access_mode: AccessMode) -> Self {
+        match access_mode {
+            {%- for name in names %}
+            AccessMode::{{ name }} => mvs_sys::MV_ACCESS_{{ name }},
+            {%- endfor %}
+        }
+    }
+}
