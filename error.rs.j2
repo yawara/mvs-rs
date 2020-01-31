@@ -1,0 +1,38 @@
+#[derive(Debug, Clone, Copy)]
+pub enum Error {
+    {%- for name, _ in names_and_raws %}
+    {{ name }},
+    {%- endfor -%}
+}
+
+pub type Result<T> = std::result::Result<T, Error>;
+
+impl Error {
+    pub(crate) fn as_raw(&self) -> u32 {
+        match self {
+            {%- for name, raw in names_and_raws %}
+            Error::{{ name }} => mvs_sys::MV_E_{{ raw }},
+            {%- endfor %}
+        }
+    }
+}
+
+impl From<u32> for Error {
+    fn from(value :u32) -> Self {
+        match value {
+            {%- for name, raw in names_and_raws %}
+            mvs_sys::MV_E_{{ raw }} => Error::{{ name }},
+            {%- endfor %}
+            _ => panic!("Unknown error code!")
+        }
+    }
+}
+
+macro_rules! try_unsafe {
+    ($x:expr) => {
+        match unsafe { $x } {
+            0 => (),
+            x => return Err((x as u32).into()),
+        }
+    };
+}

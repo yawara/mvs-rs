@@ -9,3 +9,4 @@ mod version;
 
 pub use crate::device_handle::DeviceHandle;
 pub use crate::device_info::{enumerate_devices, AccessMode};
+pub use crate::frame::{Frame, FrameInfo};
