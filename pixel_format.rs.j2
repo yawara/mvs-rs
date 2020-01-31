@@ -1,0 +1,28 @@
+#[derive(Debug, Clone, Copy)]
+#[allow(non_camel_case_types)]
+pub enum PixelFormat {
+    {%- for name in names %}
+    {{ name }},
+    {%- endfor %}
+}
+
+impl From<i64> for PixelFormat {
+    fn from(value: i64) -> Self {
+        match value {
+            {%- for name in names %}
+            mvs_sys::MvGvspPixelType_PixelType_Gvsp_{{ name }} => PixelFormat::{{ name }},
+            {%- endfor %}
+            code => panic!("Undefined pixel format code: {}", code),
+        }
+    }
+}
+
+impl From<PixelFormat> for i64 {
+    fn from(value: PixelFormat) -> Self {
+        match value {
+            {%- for name in names %}
+            PixelFormat::{{ name }} => mvs_sys::MvGvspPixelType_PixelType_Gvsp_{{ name }},
+            {%- endfor %}
+        }
+    }
+}

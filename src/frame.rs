@@ -1,3 +1,4 @@
+use crate::pixel_format::PixelFormat;
 use std::ffi::c_void;
 use std::mem::MaybeUninit;
 use std::ops::Deref;
@@ -48,8 +49,8 @@ impl FrameInfo {
         self.raw.nHeight as u32
     }
 
-    pub fn pixel_format(&self) -> i64 {
-        self.raw.enPixelType
+    pub fn pixel_format(&self) -> PixelFormat {
+        self.raw.enPixelType.into()
     }
 }
 

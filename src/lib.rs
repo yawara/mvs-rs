@@ -5,7 +5,8 @@ pub mod error;
 pub mod device_handle;
 pub mod device_info;
 pub mod frame;
-mod version;
+pub mod pixel_format;
+pub mod version;
 
 pub use crate::device_handle::DeviceHandle;
 pub use crate::device_info::{enumerate_devices, AccessMode};

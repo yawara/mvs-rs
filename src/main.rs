@@ -6,10 +6,11 @@ use std::time::Instant;
 fn print_frame_info(frame: &mvs::Frame, fps: f64) {
     let frame_info = frame.as_ref();
     println!(
-        "{} fps, width: {}, height: {}",
+        "{:.4} fps, width: {}, height: {}, pixel format: {:?}",
         fps,
         frame_info.width(),
-        frame_info.height()
+        frame_info.height(),
+        frame_info.pixel_format(),
     )
 }
 
@@ -26,10 +27,10 @@ fn main() {
         let mut num = 0;
         println!("payload size: {}", handle.payload_size());
         for _ in 0..10 {
-            //let frame = handle.get_one_frame(Duration::from_millis(1000)).unwrap();
-            let frame = handle
-                .get_image_for_bgr(Duration::from_millis(1000))
-                .unwrap();
+            let frame = handle.get_one_frame(Duration::from_millis(1000)).unwrap();
+            // let frame = handle
+            //     .get_image_for_bgr(Duration::from_millis(1000))
+            //     .unwrap();
             num += 1;
             let fps = num as f64 / start.elapsed().as_secs_f64();
             print_frame_info(&frame, fps);
