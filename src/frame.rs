@@ -24,10 +24,19 @@ impl AsRef<FrameInfo> for Frame {
     }
 }
 
+impl From<Frame> for Vec<u8> {
+    fn from(frame: Frame) -> Self {
+        let payload_size = frame.as_ref().payload_size();
+        let mut buf = frame.buf;
+        buf.split_off(payload_size as usize);
+        buf
+    }
+}
+
 impl Deref for Frame {
     type Target = [u8];
     fn deref(&self) -> &Self::Target {
-        &self.buf[0..self.as_ref().len() as usize]
+        &self.buf[0..self.as_ref().payload_size() as usize]
     }
 }
 
@@ -53,7 +62,7 @@ impl FrameInfo {
         self.raw.enPixelType.into()
     }
 
-    pub fn len(&self) -> u32 {
+    pub fn payload_size(&self) -> u32 {
         self.raw.nFrameLen
     }
 }
