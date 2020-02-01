@@ -27,7 +27,7 @@ impl AsRef<FrameInfo> for Frame {
 impl Deref for Frame {
     type Target = [u8];
     fn deref(&self) -> &Self::Target {
-        &self.buf
+        &self.buf[0..self.as_ref().len() as usize]
     }
 }
 
@@ -51,6 +51,10 @@ impl FrameInfo {
 
     pub fn pixel_format(&self) -> PixelFormat {
         self.raw.enPixelType.into()
+    }
+
+    pub fn len(&self) -> u32 {
+        self.raw.nFrameLen
     }
 }
 

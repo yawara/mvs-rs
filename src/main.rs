@@ -6,11 +6,12 @@ use std::time::Instant;
 fn print_frame_info(frame: &mvs::Frame, fps: f64) {
     let frame_info = frame.as_ref();
     println!(
-        "{:.4} fps, width: {}, height: {}, pixel format: {:?}",
+        "{:.4} fps, width: {}, height: {}, pixel format: {:?}, len: {}",
         fps,
         frame_info.width(),
         frame_info.height(),
         frame_info.pixel_format(),
+        frame_info.len(),
     )
 }
 
