@@ -1,4 +1,4 @@
-extern crate mvs_sys;
+#![warn(clippy::all)]
 
 #[macro_use]
 pub mod error;

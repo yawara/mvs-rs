@@ -44,10 +44,11 @@ impl DeviceHandle {
         }
         let mut mvcc_int: mvs_sys::MVCC_INTVALUE_EX =
             unsafe { MaybeUninit::zeroed().assume_init() };
+        let payload_size_cstr = CString::new("PayloadSize").unwrap();
         unsafe {
             mvs_sys::MV_CC_GetIntValueEx(
                 self.raw,
-                CString::new("PayloadSize").unwrap().as_ptr(),
+                payload_size_cstr.as_ptr(),
                 &mut mvcc_int as *mut mvs_sys::MVCC_INTVALUE_EX,
             );
         }

@@ -8,3 +8,5 @@ edition = "2018"
 
 [dependencies]
 mvs-sys = { path = "mvs-sys" }
+anyhow = "1.0"
+thiserror = "1.0"

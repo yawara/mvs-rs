@@ -4,6 +4,7 @@ use crate::transport_layer::TransportLayerType;
 
 use std::mem;
 
+#[derive(Debug)]
 pub struct DeviceInfo {
     raw: *mut mvs_sys::MV_CC_DEVICE_INFO,
 }

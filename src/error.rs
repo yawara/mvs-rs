@@ -159,3 +159,13 @@ macro_rules! try_unsafe {
         }
     };
 }
+
+use std::fmt;
+
+impl fmt::Display for Error {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        <Self as std::fmt::Debug>::fmt(self, f)
+    }
+}
+
+impl std::error::Error for Error {}

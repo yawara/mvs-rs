@@ -28,7 +28,7 @@ impl From<Frame> for Vec<u8> {
     fn from(frame: Frame) -> Self {
         let payload_size = frame.as_ref().payload_size();
         let mut buf = frame.buf;
-        buf.split_off(payload_size as usize);
+        buf.truncate(payload_size as usize);
         buf
     }
 }
